@@ -1,4 +1,3 @@
-function solution(s) {
-  answer = Number(s);
-  return answer;
+function solution(s) {;
+  return  Number(s);
 }
