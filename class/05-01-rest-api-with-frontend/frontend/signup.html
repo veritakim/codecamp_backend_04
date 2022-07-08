@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>회원가입 연습하기</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    function zzz(){
+      // input의 휴대폰 번호 갖고오기
+      const myphone = document.getElementById("phoneNumber").value
+      console.log("나의 핸드폰 번호", myphone)
+      // 갖고 온 핸드폰 번호를 우리가 만든 rest-api에 전달시켜 줘야한다.
+      axios.post("http://localhost:3000/tokens/phone", {
+        myPhone: myphone
+      }).then((res) => {
+        console.log(res)
+        document.getElementById("result").innerHTML = res.data
+      })
+    }
+  </script>
+</head>
+<body>
+  휴대폰 번호: <input id="phoneNumber" type="text" /> <button onclick="zzz()">인증하기</button>
+  <div id="result">인증상태</div>
+  <button>회원가입하기</button>
+</body>
+</html>
