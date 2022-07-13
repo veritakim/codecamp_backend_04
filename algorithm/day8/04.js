@@ -1,13 +1,19 @@
-function solution (s) {
+function solution (array, commands) {
   let answer = []
-
-  for (let i = 0; i < s.length; i++) {
-    arr.push(s[i])
+  
+  for (let idx = 0; idx < commands.legnth; idx++) {
+    const i = commands[i][0]
+    const j = commands[i][1] 
+    const k = commands[i][2]
+    
+    array.map((el, ii) => {
+      if (ii >= i || i <= j) {
+        answer.apush(el)
+      }
+    })
   }
 
-  arr.sort((a, b) => {return a > b ? -1 : 1})
-
-  return arr.join("")
+  console.log(answer)
 }
 
 solution("Zbcdefg")
