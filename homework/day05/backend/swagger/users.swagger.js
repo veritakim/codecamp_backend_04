@@ -34,7 +34,7 @@
 
 /**
  * @swagger
- * /users:
+ * /user:
  *   post:
  *     summary: 회원 등록하기
  *     tags: [Users]

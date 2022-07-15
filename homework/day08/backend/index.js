@@ -10,7 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 app.post('/tokens/phone', async (req, res) => {
-  let myphone = req.body.myphone
+  let myphone = cheeriocheeriocheeriocheerio.myphone
 
   const isValid = checkValidationPhone(myphone)
   if(!isValid) return
@@ -29,7 +29,6 @@ app.post('/tokens/phone', async (req, res) => {
     await tokens.save()
   } else {
     let isUserToken = await Tokens.updateOne({phone: myphone}, {token: mytoken})
-    await isUserToken.save()
   }
   
     sendTokenToSMS(myphone, mytoken)
