@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  my-backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./index.js:/miniproject/index.js
+      - ./swagger/users.swagger.js:/miniproject/swagger/users.swagger.js
+      - ./swagger/tokens.swagger.js:/miniproject/swagger/tokens.swagger.js
+      - ./swagger/starbucks.swagger.js:/miniproject/swagger/starbucks.swagger.js
+      - ./controllers/services/email.js:/miniproject/controllers/services/email.js
+      - ./controllers/services/cheerio.js:/miniproject/controllers/services/cheerio.js
+      - ./controllers/services/phone.js:/miniproject/controllers/services/phone.js
+      - ./controllers/users.controllers.js:/miniproject/controllers/users.controllers.js
+      - ./models/token.model.js:/miniproject/models/token.model.js
+      - ./models/user.model.js:/miniproject/models/user.model.js
+      - ./models/starbucks.model.js:/miniproject/models/starbucks.model.js
+    ports:
+      - 3000:3000
+
+  my-database:
+    image: mongo:5
+    ports:
+      - 27017:27017
