@@ -31,8 +31,10 @@
  *             properties:
  *               phone: 
  *                 type: string
+ *                 example: "01094149231"
  *               token: 
  *                 type: string
+ *                 example: "081234"
  *     responses:
  *       200:
  *         description: 성공

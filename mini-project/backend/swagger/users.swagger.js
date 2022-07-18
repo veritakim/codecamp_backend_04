@@ -62,16 +62,22 @@
  *             properties:
  *               name: 
  *                 type: string
+ *                 example: 홍길동
  *               email: 
  *                 type: string
+ *                 example: hong123@naver.com
  *               personal: 
  *                 type: string
+ *                 example: 020201-3434213
  *               pwd: 
  *                 type: string
+ *                 example: hong123
  *               phone: 
  *                 type: string
+ *                 example: "01094149231"
  *               prefer: 
  *                 type: string
+ *                 example: https://www.naver.com
  *     responses:
  *       200:
  *         description: 성공
