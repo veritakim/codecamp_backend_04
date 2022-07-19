@@ -42,7 +42,7 @@ app.post('/tokens/phone', async (req, res) => {
     await Tokens.updateOne({phone}, {token})
   }
 
-  // sendTokenToSMS({token, phone})
+  sendTokenToSMS({token, phone})
   res.send(`${phone}에 ${token}인증번호 전송했습니다.`)
 })
 
