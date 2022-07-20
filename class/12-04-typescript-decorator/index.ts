@@ -1,4 +1,4 @@
-function bbbb(aaaa: any) {
+function bbbb(aaaa) {
   console.log("=================");
   console.log(aaaa);
   console.log("=================");

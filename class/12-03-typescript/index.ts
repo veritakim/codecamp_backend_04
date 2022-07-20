@@ -21,7 +21,7 @@ let eee: boolean = true;
 let fff: number[] = [1, 2, 3, 4, 5];
 // fff.push("안녕하세요");
 
-let ggg: string[] = ["마크", "제노", "런쥔", 1];
+let ggg: string[] = ["마크", "제노", "런쥔"];
 let hhh: (number | string)[] = ["마크", "제노", "런쥔", 1];
 
 // 객체 타입
