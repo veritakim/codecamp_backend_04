@@ -1,0 +1,60 @@
+show databases
+;
+
+use mydocker04
+;
+
+show tables
+;
+
+desc product 
+;
+
+SELECT *
+  FROM product
+;
+
+INSERT into product(id, name, description, price, isSoldout)
+     values (uuid(),"마우스", "정말 좋은 버티컬 마우스입니다", 80000, false)
+;
+
+INSERT into product(id, name, description, price, isSoldout)
+     values (uuid(),"M2칩 맥북프로 팝니다", "새로나온 맥북프입니다", 20000, false)
+;
+
+INSERT into product_sales_location(id, address, addressDetail, lat, lng, meetingTime)
+     values (uuid(),"서울특별시 구로구 구로동", "디지털300로", "0.0", "0.1", "")
+;
+
+SELECT *
+ FROM  product_sales_location
+;
+
+
+UPDATE product 
+	set price = 18000
+where name = "마우스"
+;
+
+UPDATE product 
+set productSaleslocationId = "31dcdbe8-0bf1-11ed-b31b-0242ac150002"
+where name = "마우스"
+;
+
+SELECT name, price , address as "주소", addressDetail as "상세주소"
+FROM product p, product_sales_location ps
+WHERE p.productSalesLocationId  = ps.id 
+;
+
+UPDATE product 
+set isSoldout = true
+WHERE name = "M2칩 맥북프로 팝니다" and price = 20000
+;
+
+
+UPDATE product 
+  set price = 5000
+WHERE name = "M2칩 맥북프로 팝니다" or name = "키보드"
+;
+
+ 

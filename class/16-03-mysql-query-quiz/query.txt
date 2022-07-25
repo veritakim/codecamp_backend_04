@@ -1,0 +1,21 @@
+INSERT into product_category (id, name)
+	  values(uuid(), "전자제품")
+;
+
+INSERT into product_category (id, name)
+	  values(uuid(), "음식")
+;
+
+INSERT into product_category (id, name)
+	  values(uuid(), "의류")
+;
+
+UPDATE product 
+set productCategoryId = "44aefc33-0bf8-11ed-ab1b-0242ac150002"
+;
+
+
+SELECT p.name as "name", description, price, pc.name as category
+from product p , product_category pc 
+WHERE p.productCategoryId  = pc.id 
+;
