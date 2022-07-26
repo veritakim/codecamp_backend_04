@@ -19,7 +19,7 @@ INSERT into product(id, name, description, price, isSoldout)
 ;
 
 INSERT into product(id, name, description, price, isSoldout)
-     values (uuid(),"M2칩 맥북프로 팝니다", "새로나온 맥북프입니다", 20000, false)
+     values (uuid(),"노트북", "새로나온 맥북프입니다", 20000, false)
 ;
 
 INSERT into product_sales_location(id, address, addressDetail, lat, lng, meetingTime)

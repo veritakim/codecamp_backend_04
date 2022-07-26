@@ -3,16 +3,19 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BoardModule } from './apis/boards/boards.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Board } from './apis/boards/entities/board.entity';
 import 'dotenv/config';
 import { ConfigModule } from '@nestjs/config';
+import { ProductCategoryModule } from './apis/productsCategories/productCategory.module';
+import { ProductModule } from './apis/products/product.module';
 
 @Module({
   imports: [
+    BoardModule,
+    ProductModule,
+    ProductCategoryModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    BoardModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
