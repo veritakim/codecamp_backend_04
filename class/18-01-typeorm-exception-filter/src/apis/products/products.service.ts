@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 
 @Injectable()
-export class ProductService {
+export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
@@ -61,18 +61,13 @@ export class ProductService {
   }
 
   async checkSoldout({ productId }) {
-    try {
-      const product = await this.productRepository.findOne({
-        where: {
-          id: productId, //
-        },
-      });
-      if (product.isSoldout) {
-        throw new UnprocessableEntityException('이미 판매 완료된 상품입니다.');
-        return false;
-      } else return true;
-    } catch (error) {
-      console.log(error);
+    const product = await this.productRepository.findOne({
+      where: {
+        id: productId, //
+      },
+    });
+    if (product.isSoldout) {
+      throw new UnprocessableEntityException('이미 판매 완료된 상품입니다.');
     }
 
     // if (product.isSoldout) {
