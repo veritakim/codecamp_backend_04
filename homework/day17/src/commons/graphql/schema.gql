@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Hamster {
+  id: String!
+  name: String!
+  products: [Product!]!
+}
+
+type Payment {
+  id: String!
+  amountPrice: Int!
+  paymentMethod: String!
+}
+
+type ProductDescriptions {
+  id: String!
+  contents: String
+}
+
+type ProductMainCategory {
+  id: String!
+  name: String!
+}
+
+type ProductSubCategory {
+  id: String!
+  name: String!
+  mainCategory: ProductMainCategory!
+}
+
+type Product {
+  id: String!
+  name: String!
+  price: String!
+  expDate: DateTime!
+  productSubCategory: ProductSubCategory!
+  productDescription: ProductDescriptions
+  payment: Payment!
+  hamsters: [Hamster!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Int!
+  expDate: String!
+  subCategortId: String!
+  description: String
+}
+
+input UpdateProductInput {
+  name: String
+  price: Int
+  expDate: String
+  subCategortId: String
+  description: String
+}
