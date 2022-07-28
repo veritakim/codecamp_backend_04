@@ -18,19 +18,6 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  findAll() {
-    return this.productRepository.find({
-      relations: ['productSalesLocation'],
-    });
-  }
-
-  findOne({ productId }) {
-    return this.productRepository.findOne({
-      where: { id: productId },
-      relations: ['productSalesLocation'],
-    });
-  }
-
   async create({ createProductInput }) {
     // 1. 상품만 등록하는 경우
     // const result = await this.productRepository.save({
