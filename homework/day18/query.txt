@@ -1,0 +1,15 @@
+use mypfdocker04
+;
+
+INSERT into product_main_category (id, name)
+     values (uuid(), "음식")
+;
+
+
+INSERT into product_sub_category  (id, name, mainCategoryId)
+     values (uuid(), "간식", "eb5f1484-0d96-11ed-bd9f-0242ac1f0002")
+;
+
+INSERT into product_sub_category  (id, name, mainCategoryId)
+     values (uuid(), "사료", "eb5f1484-0d96-11ed-bd9f-0242ac1f0002")
+;
