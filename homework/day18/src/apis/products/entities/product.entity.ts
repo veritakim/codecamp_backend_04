@@ -47,13 +47,8 @@ export class Product {
 
   @JoinColumn()
   @OneToOne(() => ProductDescriptions)
-  @Field(() => ProductDescriptions, { nullable: true })
+  @Field(() => ProductDescriptions)
   productDescription: ProductDescriptions;
-
-  @JoinColumn()
-  @OneToOne(() => Payment)
-  @Field(() => Payment)
-  payment: Payment;
 
   @JoinTable()
   @ManyToMany(() => Hamster, (hamsters) => hamsters.products)

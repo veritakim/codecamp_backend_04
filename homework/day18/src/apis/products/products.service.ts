@@ -85,10 +85,11 @@ export class ProductsService {
     return result.affected ? true : false;
   }
 
-  async findDeletedAll() {
+  async findAllwithDeleted() {
     return await this.productRepository.find({
       withDeleted: true,
-      where: { deletedAt: Not(IsNull()) },
+      // where: { deletedAt: Not(IsNull()) },
+      relations: ['productDescription', 'productSubCategory']
     });
   }
 

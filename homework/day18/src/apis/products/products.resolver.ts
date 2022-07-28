@@ -52,7 +52,7 @@ export class ProductsResolver {
 
   @Query(() => [Product])
   fetchProductsWithDeleted() {
-    return this.productsService.findDeletedAll();
+    return this.productsService.findAllwithDeleted();
   }
 
   @Mutation(() => Boolean)
