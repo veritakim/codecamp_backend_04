@@ -1,0 +1,109 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductDescriptions {
+  id: String!
+  contents: String
+}
+
+type ProductMainCategory {
+  id: String!
+  name: String!
+}
+
+type ProductSubCategory {
+  id: String!
+  name: String!
+  mainCategory: ProductMainCategory!
+}
+
+type Product {
+  id: String!
+  name: String!
+  price: String!
+  expDate: String
+  isSoldout: Boolean!
+  productSubCategory: ProductSubCategory!
+  productDescription: ProductDescriptions!
+  hamsters: [Hamster!]!
+}
+
+type Hamster {
+  id: String!
+  name: String!
+  products: [Product!]!
+}
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  phoneNumber: String!
+  regDate: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchProductsWithDeleted: [Product!]!
+  fetchUsers: [User!]!
+  fetchUser(email: String!): User!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(productId: String!): Boolean!
+  restoreProduct(productId: String!): Boolean!
+  createUser(createUsersInput: CreateUsersInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  deleteUser(email: String!, password: String!): Boolean!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Int!
+  expDate: String
+  productSubCategory: ProductSubCategoryInput!
+  description: ProductDescriptionsInput!
+  hamsters: [String!]!
+}
+
+input ProductSubCategoryInput {
+  id: String!
+  name: String!
+}
+
+input ProductDescriptionsInput {
+  contents: String
+}
+
+input UpdateProductInput {
+  name: String
+  price: Int
+  expDate: String
+  productSubCategory: ProductSubCategoryInput
+  description: ProductDescriptionsInput
+  hamsters: [String!]
+}
+
+input CreateUsersInput {
+  email: String!
+  password: String!
+  name: String!
+  phoneNumber: String!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  name: String
+  phoneNumber: String
+  newPassword: String!
+}
