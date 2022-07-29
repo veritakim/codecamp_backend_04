@@ -1,9 +1,9 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './entites/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class UsersResolver {
@@ -11,10 +11,13 @@ export class UsersResolver {
     private readonly userService: UsersService, //
   ) {}
 
-  @UseGuards(AuthGuard('access'))
+  @UseGuards(GqlAuthAccessGuard)
   @Query(() => String)
-  fetchUser() {
+  fetchUser(
+    @Context() context: any, //
+  ) {
     // 유저정보 꺼내오기
+    console.log(context);
     console.log('fetchuser 실행완료');
     return 'fetchUser가 실행됐습니다.';
   }
