@@ -54,7 +54,7 @@ type Query {
   fetchProductsWithDeleted: [Product!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
-  fetchLoginUser(email: String!): User!
+  fetchLoginUser: User!
 }
 
 type Mutation {
@@ -65,9 +65,9 @@ type Mutation {
   restoreProduct(productId: String!): Boolean!
   createUser(createUsersInput: CreateUsersInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  updateUserPwd(email: String!, password: String!, newPassword: String!): User!
+  updateUserPwd(password: String!, newPassword: String!): User!
   deleteUser(email: String!, password: String!): Boolean!
-  deleteLoginUser(email: String!, password: String!): Boolean!
+  deleteLoginUser(password: String!): Boolean!
 }
 
 input CreateProductInput {

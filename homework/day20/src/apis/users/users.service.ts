@@ -13,6 +13,20 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
+
+  async fetchUsers() {
+    return await this.usersRepository.find();
+  }
+
+  async fetchUser({ email }) {
+    console.log('ser', email);
+    const result = await this.usersRepository.findOne({ where: { email } });
+    if (!result)
+      throw new UnprocessableEntityException('이메일을 확인해주세요');
+
+    return result;
+  }
+
   async createUser({ createUsersInput, hashedPassword: password }) {
     const user = await this.usersRepository.findOne({
       where: { email: createUsersInput.email },
@@ -70,17 +84,5 @@ export class UsersService {
     const result = await this.usersRepository.softDelete({ email });
 
     return result.affected ? true : false;
-  }
-
-  async fetchUsers() {
-    return await this.usersRepository.find();
-  }
-
-  async fetchUser({ email }) {
-    const result = await this.usersRepository.findOne({ where: { email } });
-    if (!result)
-      throw new UnprocessableEntityException('이메일을 확인해주세요');
-
-    return result;
   }
 }
