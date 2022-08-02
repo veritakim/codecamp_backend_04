@@ -26,41 +26,17 @@ export class AuthService {
     res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
-  async socialLogin({ user }) {
-    let isUser = await this.usersService.fetchUser({ email: user.email });
-
-    const randomPhone = '010' + Math.round(Math.random() * 100000000);
-    const randomPassword = Math.round(Math.random() * 100000000) + '';
-    const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
-    if (!isUser) {
-      const createUsersInput = {
-        ...user,
-        phoneNumber: randomPhone,
-      };
-
-      isUser = await this.usersService.createUser({
-        createUsersInput, //
-        hashedPassword,
-      });
-    }
-
-    return isUser;
-  }
-
   async setSocialLogin({ req, res }) {
     let user = await this.usersService.fetchUser({ email: req.user?.email });
 
-    console.log('setsocial', user);
-
-    const randomPhone = '010' + Math.round(Math.random() * 100000000);
-    const randomPassword = Math.round(Math.random() * 100000000) + '';
+    const randomPhone = String( Math.round( Math.random() * 100000000 ) );
+    const randomPassword = Math.round( Math.random() * 100000000 ) + '';
     const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
     if (!user) {
       const createUsersInput = {
         ...req.user,
-        phoneNumber: randomPhone,
+        phoneNumber: '010' + randomPhone.padEnd(8, "2"),
       };
 
       user = await this.usersService.createUser({
