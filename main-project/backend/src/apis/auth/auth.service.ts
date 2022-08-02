@@ -26,7 +26,7 @@ export class AuthService {
     res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
-  async setSocialLogin({ user }) {
+  async socialLogin({ user }) {
     let isUser = await this.usersService.fetchUser({ email: user.email });
 
     const randomPhone = '010' + Math.round(Math.random() * 100000000);
@@ -46,5 +46,30 @@ export class AuthService {
     }
 
     return isUser;
+  }
+
+  async setSocialLogin({ req, res }) {
+    let user = await this.usersService.fetchUser({ email: req.user?.email });
+
+    console.log('setsocial', user);
+
+    const randomPhone = '010' + Math.round(Math.random() * 100000000);
+    const randomPassword = Math.round(Math.random() * 100000000) + '';
+    const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+    if (!user) {
+      const createUsersInput = {
+        ...req.user,
+        phoneNumber: randomPhone,
+      };
+
+      user = await this.usersService.createUser({
+        createUsersInput, //
+        hashedPassword,
+      });
+    }
+
+    this.setRefreshToken({ user, res });
+    res.redirect('http://localhost:5500/main-project/frontend/login/');
   }
 }
