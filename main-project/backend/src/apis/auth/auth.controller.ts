@@ -46,4 +46,31 @@ export class AuthController {
       'http://localhost:5500/main-project/frontend/login/index.html',
     );
   }
+
+  @Get('/login/kakao')
+  @UseGuards(AuthGuard('kakao'))
+  async loginKakao(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    console.log('dddd', req.user.email);
+    let user = await this.usersService.fetchUser({ email: req.user.email });
+
+    if (!user) {
+      const createUsersInput = {
+        ...req.user,
+        phoneNumber: '01012341234',
+      };
+      // console.log('ddd', createUsersInput);
+      user = await this.usersService.createUser({
+        createUsersInput,
+        hashedPassword: '12345',
+      });
+    }
+
+    this.authService.setRefreshToken({ user, res });
+    res.redirect(
+      'http://localhost:5500/main-project/frontend/login/index.html',
+    );
+  }
 }
