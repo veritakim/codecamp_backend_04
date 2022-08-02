@@ -49,11 +49,11 @@ export class AuthController {
 
   @Get('/login/kakao')
   @UseGuards(AuthGuard('kakao'))
-  async loginKakao(
+  async loginKakaos(
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    console.log('dddd', req.user.email);
+    /*
     let user = await this.usersService.fetchUser({ email: req.user.email });
 
     if (!user) {
@@ -67,10 +67,43 @@ export class AuthController {
         hashedPassword: '12345',
       });
     }
+    */
+
+    const user = await this.authService.setSocialLogin({
+      user: req.user,
+    });
 
     this.authService.setRefreshToken({ user, res });
-    res.redirect(
-      'http://localhost:5500/main-project/frontend/login/index.html',
-    );
+    res.redirect('http://localhost:5500/main-project/frontend/login/');
+  }
+
+  @Get('/login/naver')
+  @UseGuards(AuthGuard('naver'))
+  async loginNaver(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    /*
+    let user = await this.usersService.fetchUser({ email: req.user.email });
+
+    if (!user) {
+      const createUsersInput = {
+        ...req.user,
+        phoneNumber: '01012341234',
+      };
+      // console.log('ddd', createUsersInput);
+      user = await this.usersService.createUser({
+        createUsersInput,
+        hashedPassword: '12345',
+      });
+    }
+    */
+
+    const user = await this.authService.setSocialLogin({
+      user: req.user,
+    });
+
+    this.authService.setRefreshToken({ user, res });
+    res.redirect('http://localhost:5500/main-project/frontend/login/');
   }
 }

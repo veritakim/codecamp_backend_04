@@ -9,6 +9,8 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
+import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
+import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
     TypeOrmModule.forFeature([User]),
   ],
   providers: [
+    JwtKakaoStrategy,
+    JwtNaverStrategy,
     JwtAccessStrategy,
     JwtGoogleStrategy,
     JwtRefreshStrategy,
