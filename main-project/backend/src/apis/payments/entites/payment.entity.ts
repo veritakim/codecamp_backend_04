@@ -1,5 +1,21 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { User } from 'src/apis/users/entites/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+export enum POINT_TRANSACTION_STATUS_ENUM {
+  PAYMENT = 'PAYMENT',
+  CANCEL = 'CANCEL',
+}
+
+registerEnumType(POINT_TRANSACTION_STATUS_ENUM, {
+  name: 'POINT_TRANSACTION_STATUS_ENUM',
+});
 
 @Entity()
 @ObjectType()
@@ -8,11 +24,18 @@ export class Payment {
   @Field(() => String)
   id: string;
 
-  @Column()
-  @Field(() => Int)
-  amountPrice: number;
+  @Column(() => String)
+  @Field(() => String)
+  impUid: string;
 
   @Column()
-  @Field(() => String)
-  paymentMethod: string;
+  @Field(() => Int)
+  amount: number;
+
+  // @Column({ default: '신용카드' })
+  // @Field(() => String)
+  // paymentMethod: string;
+
+  @Column({ type: 'enum', enum: POINT_TRANSACTION_STATUS_ENUM })
+  status: string;
 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>결제하기</title>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/axios/dist/axios.min.js"
+    ></script>
+    <script>
+      function mypayment() {
+        const myAmount = Number(document.getElementById("amount").value);
+
+        const date = new Date();
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1);
+        const dd = date.getDate();
+
+        const random = String(Math.random() * 10000).padEnd(5, "2");
+
+        const IMP = window.IMP; // 생략 가능
+        IMP.init("imp19916705"); // Example: imp00000000
+        IMP.request_pay(
+          {
+            // param
+            pg: "nice",
+            pay_method: "card",
+            name: "골든햄스터 사료",
+            amount: myAmount,
+            buyer_email: "gildong@gmail.com",
+            buyer_name: "홍길동",
+            buyer_tel: "010-4242-4242",
+            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_postcode: "01181",
+            m_redirect_url: "", // 모바일 결제후 리다이렉트될 주소!!
+          },
+          async (rsp) => {
+            // callback
+            if (rsp.success) {
+              // 결제 성공시
+              console.log(rsp);
+
+              const data = await axios.post(
+                "http://localhost:3000/graphql",
+                {
+                  query: `
+                      mutation {
+                        createItemsOrder(
+                          createOrderInput: {
+                            cs: "배송중",
+                            quantity: 1,
+                            orderNumber: "${random}",
+                            product: "5a41e069-6a34-4b60-aaec-efec29f42ced"
+                          },
+                          impUid: "${rsp.imp_uid}",
+                          amount: ${rsp.paid_amount}
+                          ) {
+                          id
+                        }
+                      }
+                    `,
+                },
+                {
+                  headers: {
+                    authorization:
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiIzMzVmNDUwMC0zMzZjLTRlNzItOWNiNS0yNmMzMzVmMGQzZTkiLCJpYXQiOjE2NTk2MTg3MzMsImV4cCI6MTY1OTYyMjMzM30.coO5Srr1BF3rzkrGsj0pLAEvSJ1m6zEmdhkKEeI8bsw",
+                  },
+                }
+              );
+
+              console.log(data);
+            } else {
+              // 결제 실패시
+              alert("실패");
+            }
+          }
+        );
+      }
+    </script>
+  </head>
+  <body>
+    결제할 금액: <input type="text" id="amount" />
+    <button onclick="mypayment()">결제하기</button>
+  </body>
+</html>

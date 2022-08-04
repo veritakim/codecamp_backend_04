@@ -1,7 +1,17 @@
+import { UseGuards } from '@nestjs/common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Payment } from 'src/apis/payments/entites/payment.entity';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/users/entites/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -10,7 +20,7 @@ export class ProductOrder {
   @Field(() => String)
   id: string;
 
-  @Column()
+  @CreateDateColumn()
   @Field(() => Date)
   orderDate: Date;
 
@@ -33,4 +43,9 @@ export class ProductOrder {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @JoinColumn()
+  @OneToOne(() => Payment)
+  @Field(() => Payment)
+  payment: Payment;
 }

@@ -22,11 +22,11 @@ export class Product {
   @Field(() => String)
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String)
   price: number;
 

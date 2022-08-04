@@ -6,11 +6,15 @@ import 'dotenv/config';
 import { ProductsModule } from './apis/products/products.module';
 import { UsersMoudule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
+import { PaymentsModule } from './apis/payments/payments.module';
+import { ProductOrdersModule } from './apis/productOders/productOrders.module';
 
 @Module({
   imports: [
     AuthModule,
     ProductsModule,
+    PaymentsModule,
+    ProductOrdersModule,
     UsersMoudule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

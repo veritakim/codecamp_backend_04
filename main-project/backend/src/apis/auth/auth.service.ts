@@ -13,7 +13,7 @@ export class AuthService {
   getAccessToken({ user }) {
     return this.jwtService.sign(
       { email: user.email, sub: user.id }, //
-      { secret: 'myAccessKey', expiresIn: '30s' },
+      { secret: 'myAccessKey', expiresIn: '1h' },
     );
   }
 
@@ -29,14 +29,14 @@ export class AuthService {
   async setSocialLogin({ req, res }) {
     let user = await this.usersService.fetchUser({ email: req.user?.email });
 
-    const randomPhone = String( Math.round( Math.random() * 100000000 ) );
-    const randomPassword = Math.round( Math.random() * 100000000 ) + '';
+    const randomPhone = String(Math.round(Math.random() * 100000000));
+    const randomPassword = Math.round(Math.random() * 100000000) + '';
     const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
     if (!user) {
       const createUsersInput = {
         ...req.user,
-        phoneNumber: '010' + randomPhone.padEnd(8, "2"),
+        phoneNumber: '010' + randomPhone.padEnd(8, '2'),
       };
 
       user = await this.usersService.createUser({
