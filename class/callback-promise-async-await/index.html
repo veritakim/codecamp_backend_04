@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <title>callback/async-await/promise</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    function myCallback() {
+      const aaa = new XMLHttpRequest()
+      aaa.open("get", "http://numbersapi.com/random?min=1&max=200")
+      aaa.send()
+      aaa.addEventListener("load", (res) => {
+        console.log("데이터가 로드되면 실행시켜줘")
+        const num = res.currentTarget.response.split(" ")[0]
+        
+        const bb = new XMLHttpRequest()
+        bb.open("get", `http://koreanjson.com/posts/${num}`)
+        bb.send()
+        bb.addEventListener("load", (res) => {
+          console.log("bb데이터가 로드되면 실행시켜줘")
+          const userId = JSON.parse(res.target.response).UserId
+          
+          const cc = new XMLHttpRequest()
+          cc.open("get", `http://koreanjson.com/posts?userId=${userId}`)
+          cc.send()
+          cc.addEventListener("load", (res) => {
+            console.log("cc데이터가 로드되면 실행시켜줘")
+            console.log(res)
+          })
+        })
+      })
+      
+    }
+    function myPromise() {
+      axios.get("http://numbersapi.com/random?min=1&max=200")
+          .then((res) => {
+            const num = res.data.split(" ")[0]
+          
+            return axios.get(`http://koreanjson.com/posts/${num}`)
+                .then((res) => {
+                  const userId = res.data.UserId
+
+                  return axios.get(`http://koreanjson.com/posts?userId=${userId}`)
+                        .then((res) => {
+                          console.log(res.data)
+                        })
+                })
+
+          })
+    }
+    async function myAsyncAwait() {
+      const res1 = await axios.get(
+                    "http://numbersapi.com/random?min=1&max=200"
+                );
+      const num = res1.data.split(" ")[0];
+
+      const res2 = await axios.get(
+          `http://koreanjson.com/posts/${num}`
+      );
+      const userId = res2.data.UserId;
+
+      const res3 = await axios.get(
+          `http://koreanjson.com/posts?userId=${userId}`
+      );
+      console.log(res3.data);
+    }
+
+  </script>
+</head>
+<body>
+  <button onclick="myCallback()">Callback연습하기!!</button>
+  <button onclick="myPromise()">Promise연습하기!!</button>
+  <button onclick="myAsyncAwait()">Async-Await연습하기!!</button>
+  
+</body>
+</html>
