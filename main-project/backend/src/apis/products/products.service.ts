@@ -19,6 +19,7 @@ export class ProductsService {
 
   async createproduct({ createProductInput }) {
     const today = Today();
+    const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
 
     const { expDate, description, productSubCategory, hamsters, ...rest } =
       createProductInput;
@@ -53,6 +54,7 @@ export class ProductsService {
 
     const result = await this.productRepository.save({
       ...rest,
+      productId: `FOOD-${random}`,
       productDescription: desc,
       expDate: newExpDate,
       productSubCategory: productSubCategory,

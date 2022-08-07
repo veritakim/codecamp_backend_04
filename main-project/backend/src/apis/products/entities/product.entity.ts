@@ -22,6 +22,10 @@ export class Product {
   @Field(() => String)
   id: string;
 
+  // @Column()
+  // @Field(() => String)
+  // productId: string;
+
   @Column({ unique: true, nullable: true })
   @Field(() => String)
   name: string;

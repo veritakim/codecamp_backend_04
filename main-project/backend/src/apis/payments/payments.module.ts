@@ -1,5 +1,7 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { IamportService } from '../iamport/import.service';
 import { Payment } from './entites/payment.entity';
 import { PaymentsResolver } from './payments.resolver';
 import { PaymentsService } from './payments.service';
@@ -9,10 +11,12 @@ import { PaymentsService } from './payments.service';
     TypeOrmModule.forFeature([
       Payment, //
     ]),
+    HttpModule,
   ],
   providers: [
     PaymentsResolver, //
     PaymentsService,
+    IamportService,
   ],
 })
 export class PaymentsModule {}

@@ -9,8 +9,5 @@ export class CreateOrderInput {
   quantity: number;
 
   @Field(() => String)
-  orderNumber: string;
-
-  @Field(() => String)
   product: string;
 }

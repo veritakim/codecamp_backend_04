@@ -8,6 +8,7 @@ import { UsersMoudule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { PaymentsModule } from './apis/payments/payments.module';
 import { ProductOrdersModule } from './apis/productOders/productOrders.module';
+import { IamportModule } from './apis/iamport/import.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ProductOrdersModule } from './apis/productOders/productOrders.module';
     ProductsModule,
     PaymentsModule,
     ProductOrdersModule,
+    IamportModule,
     UsersMoudule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

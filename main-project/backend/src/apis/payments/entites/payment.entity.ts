@@ -24,7 +24,7 @@ export class Payment {
   @Field(() => String)
   id: string;
 
-  @Column(() => String)
+  @Column()
   @Field(() => String)
   impUid: string;
 
@@ -32,9 +32,9 @@ export class Payment {
   @Field(() => Int)
   amount: number;
 
-  // @Column({ default: '신용카드' })
-  // @Field(() => String)
-  // paymentMethod: string;
+  @Column()
+  @Field(() => String)
+  merchantUid: string;
 
   @Column({ type: 'enum', enum: POINT_TRANSACTION_STATUS_ENUM })
   status: string;

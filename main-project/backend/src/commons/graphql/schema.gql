@@ -52,6 +52,7 @@ type Payment {
   id: String!
   impUid: String!
   amount: Int!
+  merchantUid: String!
 }
 
 type ProductOrder {
@@ -81,8 +82,8 @@ type Mutation {
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
   restoreProduct(productId: String!): Boolean!
-  createPayment: Payment!
-  createItemsOrder(impUid: String!, amount: Int!, createOrderInput: CreateOrderInput!): ProductOrder!
+  createPayment(impUid: String!, amount: Int!, createOrderInput: CreateOrderInput!): ProductOrder!
+  cancelPaymentOrder(impUid: String!, reason: String!, checksum: Float!): String!
   createUser(createUsersInput: CreateUsersInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   updateUserPwd(password: String!, newPassword: String!): User!
@@ -120,7 +121,6 @@ input UpdateProductInput {
 input CreateOrderInput {
   cs: String!
   quantity: Int!
-  orderNumber: String!
   product: String!
 }
 

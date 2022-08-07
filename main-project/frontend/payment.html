@@ -15,6 +15,27 @@
       src="https://unpkg.com/axios/dist/axios.min.js"
     ></script>
     <script>
+      async function mycancel() {
+        const impUid = document.getElementById("impUid").value;
+        const data = await axios.post(
+          "http://localhost:3000/graphql",
+          {
+            query: `
+                      mutation {
+                        deleteOrder(
+                          impUid: "${impUid}"
+                          ) 
+                      }
+                    `,
+          },
+          {
+            headers: {
+              authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiIzMzVmNDUwMC0zMzZjLTRlNzItOWNiNS0yNmMzMzVmMGQzZTkiLCJpYXQiOjE2NTk2ODE3ODgsImV4cCI6MTY2MDI4NjU4OH0.-BSUEH--Huia_uoa3W7VCgbpfcxOwgWhcMy5Kid5bd4",
+            },
+          }
+        );
+      }
       function mypayment() {
         const myAmount = Number(document.getElementById("amount").value);
 
@@ -23,8 +44,6 @@
         const mm = String(date.getMonth() + 1);
         const dd = date.getDate();
 
-        const random = String(Math.random() * 10000).padEnd(5, "2");
-
         const IMP = window.IMP; // 생략 가능
         IMP.init("imp19916705"); // Example: imp00000000
         IMP.request_pay(
@@ -32,9 +51,9 @@
             // param
             pg: "nice",
             pay_method: "card",
-            name: "골든햄스터 사료",
+            name: "실버햄스터 사료",
             amount: myAmount,
-            buyer_email: "gildong@gmail.com",
+            buyer_email: "",
             buyer_name: "홍길동",
             buyer_tel: "010-4242-4242",
             buyer_addr: "서울특별시 강남구 신사동",
@@ -43,6 +62,7 @@
           },
           async (rsp) => {
             // callback
+
             if (rsp.success) {
               // 결제 성공시
               console.log(rsp);
@@ -52,11 +72,11 @@
                 {
                   query: `
                       mutation {
-                        createItemsOrder(
+                        createPayment(
                           createOrderInput: {
-                            cs: "배송중",
+                            cs: "결제완료",
                             quantity: 1,
-                            orderNumber: "ORD-${random}",
+                            
                             product: "5a41e069-6a34-4b60-aaec-efec29f42ced"
                           },
                           impUid: "${rsp.imp_uid}",
@@ -70,7 +90,7 @@
                 {
                   headers: {
                     authorization:
-                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiIzMzVmNDUwMC0zMzZjLTRlNzItOWNiNS0yNmMzMzVmMGQzZTkiLCJpYXQiOjE2NTk2MTg3MzMsImV4cCI6MTY1OTYyMjMzM30.coO5Srr1BF3rzkrGsj0pLAEvSJ1m6zEmdhkKEeI8bsw",
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJzdWIiOiIzMzVmNDUwMC0zMzZjLTRlNzItOWNiNS0yNmMzMzVmMGQzZTkiLCJpYXQiOjE2NTk2ODE3ODgsImV4cCI6MTY2MDI4NjU4OH0.-BSUEH--Huia_uoa3W7VCgbpfcxOwgWhcMy5Kid5bd4",
                   },
                 }
               );
@@ -88,5 +108,7 @@
   <body>
     결제할 금액: <input type="text" id="amount" />
     <button onclick="mypayment()">결제하기</button>
+    ImpUid: <input type="text" id="impUid" />
+    <button onclick="mycancel()">결제취소하기</button>
   </body>
 </html>
