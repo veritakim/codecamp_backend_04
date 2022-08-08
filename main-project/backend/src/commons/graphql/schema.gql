@@ -23,7 +23,7 @@ type Product {
   name: String!
   price: String!
   expDate: String
-  isSoldout: Boolean!
+  quantity: String!
   productSubCategory: ProductSubCategory!
   productDescription: ProductDescriptions!
   hamsters: [Hamster!]!
@@ -83,7 +83,7 @@ type Mutation {
   deleteProduct(productId: String!): Boolean!
   restoreProduct(productId: String!): Boolean!
   createPayment(impUid: String!, amount: Int!, createOrderInput: CreateOrderInput!): ProductOrder!
-  cancelPaymentOrder(impUid: String!, reason: String!, checksum: Float!): String!
+  cancelPaymentOrder(impUid: String!, reason: String!, productId: String!, checksum: Float!, quantity: Float!): String!
   createUser(createUsersInput: CreateUsersInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   updateUserPwd(password: String!, newPassword: String!): User!
@@ -94,6 +94,7 @@ type Mutation {
 input CreateProductInput {
   name: String!
   price: Int!
+  quantity: Int!
   expDate: String
   productSubCategory: ProductSubCategoryInput!
   description: ProductDescriptionsInput!
@@ -112,6 +113,7 @@ input ProductDescriptionsInput {
 input UpdateProductInput {
   name: String
   price: Int
+  quantity: Int
   expDate: String
   productSubCategory: ProductSubCategoryInput
   description: ProductDescriptionsInput

@@ -69,9 +69,9 @@ export class ProductsService {
       where: { id: productId },
     });
     // const dd = result.expDate.split('-').join('').substring(0, 8);
-    const isSoldout = result.isSoldout;
+    const isSoldout = result.quantity;
 
-    if (isSoldout) {
+    if (isSoldout === 0) {
       throw new UnprocessableEntityException('판매 완료된 상품입니다.');
     }
   }

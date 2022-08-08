@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Payment } from '../payments/entites/payment.entity';
 import { ProductOrder } from './entities/productOrder.entity';
 
@@ -11,19 +11,34 @@ export class ProductsOrdersService {
     private readonly productOrderRepository: Repository<ProductOrder>,
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+    private readonly connection: Connection,
   ) {}
 
   async createOrder({ createOrderInput, user, pay }) {
-    const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const orderResult = await this.productOrderRepository.save({
-      ...createOrderInput,
-      user,
-      payment: pay?.id,
-      orderNumber: `ORD-${random}`,
-    });
+    try {
+      const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
 
-    return orderResult;
+      const orderResult = await this.productOrderRepository.create({
+        ...createOrderInput,
+        user,
+        payment: pay?.id,
+        orderNumber: `ORD-${random}`,
+      });
+
+      queryRunner.manager.save(orderResult);
+
+      await queryRunner.commitTransaction();
+
+      return orderResult;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      queryRunner.release();
+    }
   }
 
   async findOrder({ paymentId, user }) {
@@ -31,12 +46,14 @@ export class ProductsOrdersService {
       where: { payment: { id: paymentId } },
       loadRelationIds: true,
     });
+    // console.log('findOrder', result);
 
     const orderUserId = result[0].user;
 
     if (user !== orderUserId) {
       throw new UnprocessableEntityException('유저의 정보가 다릅니다');
     }
+    return result;
   }
 
   async cancelProductOrder({ paymentId }) {

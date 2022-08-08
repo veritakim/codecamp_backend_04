@@ -38,9 +38,9 @@ export class Product {
   @Field(() => String, { nullable: true })
   expDate: Date;
 
-  @Column({ default: false })
-  @Field(() => Boolean)
-  isSoldout: boolean;
+  @Column()
+  @Field(() => String)
+  quantity: number;
 
   @DeleteDateColumn()
   deletedAt: Date;

@@ -12,6 +12,10 @@ export class CreateProductInput {
   @Field(() => Int)
   price: number;
 
+  @Min(0)
+  @Field(() => Int)
+  quantity: number;
+
   @Field(() => String, { nullable: true })
   expDate: Date;
 
