@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { FilesService } from '../files/files.service';
 import { CreateProductInput } from './dto/createProducts.input';
 import { UpdateProductInput } from './dto/updateProducts.input';
 import { Product } from './entities/product.entity';
@@ -8,13 +9,13 @@ import { ProductsService } from './products.service';
 export class ProductsResolver {
   constructor(
     private readonly productsService: ProductsService, //
+    private readonly filesService: FilesService,
   ) {}
 
   @Mutation(() => Product)
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    // graphql return type에서 subcategory null이 나오는걸 해결 못했습니다. id로 받으면 나옵니다.
     return this.productsService.createproduct({ createProductInput });
   }
 
@@ -24,9 +25,12 @@ export class ProductsResolver {
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
     await this.productsService.checkIsSoldout({ productId });
-    // 유통기한이 넘지 않은
+
+    const originImage = await this.filesService.findImages({ productId });
+    // console.log('DDDDDDD', originImage);
     return this.productsService.updateProduct({
       productId,
+      originImage,
       updateProductInput,
     });
   }

@@ -26,5 +26,8 @@ export class CreateProductInput {
   description: ProductDescriptionsInput;
 
   @Field(() => [String])
+  images: string[];
+
+  @Field(() => [String])
   hamsters: string[];
 }

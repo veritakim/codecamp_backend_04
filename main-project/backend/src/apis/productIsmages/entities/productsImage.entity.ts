@@ -1,17 +1,19 @@
+import { ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class ProductImage {
+@ObjectType()
+export class ProductsImage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   url: string;
 
-  @Column()
+  @Column({ nullable: true })
   isMain: boolean;
 
-  @ManyToOne(() => Product)
+  @ManyToOne(() => Product, (product) => product.images)
   product: Product;
 }

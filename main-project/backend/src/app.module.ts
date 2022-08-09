@@ -9,6 +9,7 @@ import { AuthModule } from './apis/auth/auth.module';
 import { PaymentsModule } from './apis/payments/payments.module';
 import { ProductOrdersModule } from './apis/productOders/productOrders.module';
 import { IamportModule } from './apis/iamport/import.module';
+import { FilesModule } from './apis/files/files.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { IamportModule } from './apis/iamport/import.module';
     ProductsModule,
     PaymentsModule,
     ProductOrdersModule,
+    FilesModule,
     IamportModule,
     UsersMoudule,
     GraphQLModule.forRoot<ApolloDriverConfig>({

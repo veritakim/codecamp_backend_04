@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Hamster {
+  id: String!
+  name: String!
+  products: [Product!]!
+}
+
 type ProductDescriptions {
   id: String!
   contents: String
@@ -27,12 +33,7 @@ type Product {
   productSubCategory: ProductSubCategory!
   productDescription: ProductDescriptions!
   hamsters: [Hamster!]!
-}
-
-type Hamster {
-  id: String!
-  name: String!
-  products: [Product!]!
+  images: [String!]!
 }
 
 type User {
@@ -84,6 +85,7 @@ type Mutation {
   restoreProduct(productId: String!): Boolean!
   createPayment(impUid: String!, amount: Int!, createOrderInput: CreateOrderInput!): ProductOrder!
   cancelPaymentOrder(impUid: String!, reason: String!, productId: String!, checksum: Float!, quantity: Float!): String!
+  uploadProductImages(files: [Upload!]!): [String!]!
   createUser(createUsersInput: CreateUsersInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   updateUserPwd(password: String!, newPassword: String!): User!
@@ -98,6 +100,7 @@ input CreateProductInput {
   expDate: String
   productSubCategory: ProductSubCategoryInput!
   description: ProductDescriptionsInput!
+  images: [String!]!
   hamsters: [String!]!
 }
 
@@ -117,6 +120,7 @@ input UpdateProductInput {
   expDate: String
   productSubCategory: ProductSubCategoryInput
   description: ProductDescriptionsInput
+  images: [String!]
   hamsters: [String!]
 }
 
@@ -125,6 +129,9 @@ input CreateOrderInput {
   quantity: Int!
   product: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateUsersInput {
   email: String!

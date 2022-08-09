@@ -2,6 +2,7 @@ import { DateScalarMode, Field, ObjectType } from '@nestjs/graphql';
 import { Hamster } from 'src/apis/hamsters/entites/hamster.entity';
 import { Payment } from 'src/apis/payments/entites/payment.entity';
 import { ProductDescriptions } from 'src/apis/productDescriptions/entities/productDescription.entity';
+import { ProductsImage } from 'src/apis/productIsmages/entities/productsImage.entity';
 import { ProductSubCategory } from 'src/apis/productsSubCategories/entities/productSubCategory.entity';
 import {
   Column,
@@ -11,6 +12,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -18,7 +20,7 @@ import {
 @Entity()
 @ObjectType()
 export class Product {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'productId' })
   @Field(() => String)
   id: string;
 
@@ -58,4 +60,8 @@ export class Product {
   @ManyToMany(() => Hamster, (hamsters) => hamsters.products)
   @Field(() => [Hamster])
   hamsters: Hamster[];
+
+  @OneToMany(() => ProductsImage, (productImages) => productImages.product)
+  @Field(() => [String])
+  images: string[];
 }

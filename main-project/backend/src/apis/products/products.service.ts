@@ -1,9 +1,10 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Today } from 'src/commons/utils/today';
-import { IsNull, Not, Repository } from 'typeorm';
+import { DataSource, IsNull, Not, Repository } from 'typeorm';
 import { Hamster } from '../hamsters/entites/hamster.entity';
 import { ProductDescriptions } from '../productDescriptions/entities/productDescription.entity';
+import { ProductsImage } from '../productIsmages/entities/productsImage.entity';
 import { Product } from './entities/product.entity';
 
 @Injectable()
@@ -15,53 +16,80 @@ export class ProductsService {
     private readonly productDescriptionRepository: Repository<ProductDescriptions>,
     @InjectRepository(Hamster)
     private readonly hamsterRepository: Repository<Hamster>,
+    @InjectRepository(ProductsImage)
+    private readonly productsImageRepository: Repository<ProductsImage>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async createproduct({ createProductInput }) {
-    const today = Today();
-    const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const { images } = createProductInput;
+      const today = Today();
+      const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
 
-    const { expDate, description, productSubCategory, hamsters, ...rest } =
-      createProductInput;
+      const { expDate, description, productSubCategory, hamsters, ...rest } =
+        createProductInput;
 
-    const newExpDate = expDate.split('-').join('').substring(0, 8);
-    if (newExpDate < today) {
-      throw new UnprocessableEntityException('유통기한이 지난 상품입니다.');
-    }
-
-    const desc = await this.productDescriptionRepository.save({
-      ...description,
-    });
-
-    // n:m hamsters 등록하기
-    const hamsterArr = [];
-    for (let i = 0; i < hamsters.length; i++) {
-      const hamsterName = await this.hamsterRepository.findOne({
-        where: { name: hamsters[i] },
-      });
-      // console.log('ham', hamsterName);
-
-      if (hamsterName) {
-        hamsterArr.push(hamsterName);
-      } else {
-        const newHamster = await this.hamsterRepository.save({
-          name: hamsters[i],
-        });
-        hamsterArr.push(newHamster);
+      const newExpDate = expDate.split('-').join('').substring(0, 8);
+      if (newExpDate < today) {
+        throw new UnprocessableEntityException('유통기한이 지난 상품입니다.');
       }
-      console.log('ham', hamsterArr);
+
+      const desc = await this.productDescriptionRepository.save({
+        ...description,
+      });
+
+      // n:m hamsters 등록하기
+      const hamsterArr = [];
+      for (let i = 0; i < hamsters.length; i++) {
+        const hamsterName = await this.hamsterRepository.findOne({
+          where: { name: hamsters[i] },
+        });
+        // console.log('ham', hamsterName);
+
+        if (hamsterName) {
+          hamsterArr.push(hamsterName);
+        } else {
+          const newHamster = await this.hamsterRepository.save({
+            name: hamsters[i],
+          });
+          hamsterArr.push(newHamster);
+        }
+        // console.log('ham', hamsterArr);
+      }
+
+      const result = await this.productRepository.save({
+        ...rest,
+        productId: `FOOD-${random}`,
+        productDescription: desc,
+        expDate: newExpDate,
+        productSubCategory: productSubCategory,
+        hamsters: hamsterArr,
+      });
+
+      const productId = result.id;
+      console.log('productId', productId);
+
+      console.log('images', images);
+      images.map(
+        async (el) =>
+          await this.productsImageRepository.save({
+            url: el,
+            product: productId,
+          }),
+      );
+
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      console.log(error.message);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
-
-    const result = await this.productRepository.save({
-      ...rest,
-      productId: `FOOD-${random}`,
-      productDescription: desc,
-      expDate: newExpDate,
-      productSubCategory: productSubCategory,
-      hamsters: hamsterArr,
-    });
-
-    return result;
   }
 
   async checkIsSoldout({ productId }) {
@@ -76,7 +104,15 @@ export class ProductsService {
     }
   }
 
-  async updateProduct({ productId, updateProductInput }) {
+  async updateProduct({ productId, updateProductInput, originImage }) {
+    const { images } = updateProductInput;
+    // console.log('QQQQQQQQQ', originImage[0].url);
+
+    // const updateImage = [];
+    await this.productsImageRepository.delete({
+      product: { id: productId },
+    });
+
     const myproduct = await this.productRepository.findOne({
       where: { id: productId },
     });
@@ -86,6 +122,19 @@ export class ProductsService {
       id: productId,
       ...updateProductInput,
     });
+
+    await Promise.all(
+      images.map(
+        (el) =>
+          new Promise((resolve) => {
+            const result = this.productsImageRepository.save({
+              url: el,
+              product: productId,
+            });
+            resolve(result);
+          }),
+      ),
+    );
 
     return result;
   }
