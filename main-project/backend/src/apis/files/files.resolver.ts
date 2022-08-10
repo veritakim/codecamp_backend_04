@@ -13,6 +13,7 @@ export class FilesResolver {
   uploadProductImages(
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
   ) {
+    // console.log('fffffff', files);
     return this.filesServise.productImageUpload({ files });
   }
 

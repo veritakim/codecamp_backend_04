@@ -10,11 +10,11 @@ export class FilesService {
     @InjectRepository(ProductsImage)
     private readonly productsImage: Repository<ProductsImage>,
   ) {}
+
   async productImageUpload({ files }) {
     console.log(files);
 
     const waitedFiles = await Promise.all(files);
-    // console.log(waitedFiles);
 
     const storage = new Storage({
       projectId: 'united-blend-358105',
@@ -23,10 +23,12 @@ export class FilesService {
 
     const bucket = 'codecamp-be04-storage';
 
+    console.log('-----------');
     const results = await Promise.all(
       waitedFiles.map(
         (el) =>
           new Promise((resolve, reject) => {
+            console.log('000000', el);
             el.createReadStream()
               .pipe(
                 storage.file(el.filename).createWriteStream(), //
@@ -38,6 +40,21 @@ export class FilesService {
     );
     console.log('result', results);
     return results;
+  }
+
+  async imageDelete({ files }) {
+    const storage = new Storage();
+    console.log('FileServices: imageDelete', files);
+    files.map((el) => el.replace('codecamp-be04-storage/', ''));
+
+    await Promise.all(
+      files.map(
+        (el) =>
+          new Promise((resolve, reject) => {
+            storage.bucket('codecamp-be04-storage').file(el).delete();
+          }),
+      ),
+    );
   }
 
   async findImages({ productId }) {

@@ -2,6 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Today } from 'src/commons/utils/today';
 import { DataSource, IsNull, Not, Repository } from 'typeorm';
+import { FilesService } from '../files/files.service';
 import { Hamster } from '../hamsters/entites/hamster.entity';
 import { ProductDescriptions } from '../productDescriptions/entities/productDescription.entity';
 import { ProductsImage } from '../productIsmages/entities/productsImage.entity';
@@ -19,6 +20,7 @@ export class ProductsService {
     @InjectRepository(ProductsImage)
     private readonly productsImageRepository: Repository<ProductsImage>,
     private readonly dataSource: DataSource,
+    private readonly fileServies: FilesService,
   ) {}
 
   async createproduct({ createProductInput }) {
@@ -104,7 +106,7 @@ export class ProductsService {
     }
   }
 
-  async updateProduct({ productId, updateProductInput, originImage }) {
+  async updateProduct({ productId, updateProductInput, originImage: files }) {
     const { images } = updateProductInput;
     // console.log('QQQQQQQQQ', originImage[0].url);
 
@@ -112,6 +114,8 @@ export class ProductsService {
     await this.productsImageRepository.delete({
       product: { id: productId },
     });
+
+    await this.fileServies.imageDelete({ files });
 
     const myproduct = await this.productRepository.findOne({
       where: { id: productId },
