@@ -1,0 +1,23 @@
+show tables;
+
+# 프로시저 보기
+show procedure status;
+
+# 프로시저 삭제 (기존에 만든 프로시저 삭제시 필요)
+DROP  procedure aaa;
+
+# 프로시저 생성(세미콜론 위치 주의)
+CREATE procedure mydummydata()
+begin
+	# let i = 1
+	declare i int default 1;	
+	while i <= 5000000 do
+		insert into board(writer, title, contents) values ('철수', rand(), '내용');
+		set i = i + 1;
+	
+	end while;
+
+end;
+
+
+call mydummydata();
