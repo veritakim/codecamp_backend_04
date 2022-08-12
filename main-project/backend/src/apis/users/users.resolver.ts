@@ -21,10 +21,19 @@ export class UsersResolver {
     return this.usersService.fetchUsers();
   }
 
+  // @Query(() => User)
+  // fetchUser(
+  //   @Args('email') email: string, //
+  // ) {
+  //   return this.usersService.fetchUser({ email });
+  // }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
   fetchUser(
-    @Args('email') email: string, //
+    @Context() context: IContext, //
   ) {
+    const email = context.req.user.email;
     return this.usersService.fetchUser({ email });
   }
 

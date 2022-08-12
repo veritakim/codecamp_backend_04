@@ -1,8 +1,13 @@
+import { CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { Strategy } from 'passport-jwt';
+import { Cache } from 'cache-manager';
 
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
-  constructor() {
+  constructor(
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
+  ) {
     super({
       jwtFromRequest: (req) => {
         const cookie = req.headers.cookie;
@@ -10,10 +15,19 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
         return refreshToken;
       },
       secretOrKey: 'myRefreshKey',
+      passReqToCallback: true,
     });
   }
 
-  validate(payload) {
+  async validate(req, payload) {
+    const refresh = req.headers['cookie'].split('=')[1];
+
+    const isRefresh = await this.cacheManager.get(`refreshToken:${refresh}`);
+    if (isRefresh) {
+      throw new UnauthorizedException();
+    }
+
+    console.log('refresh');
     console.log(payload); // { email: c@c.com, sub: qkwefuasdij-012093sd }
     return {
       email: payload.email,

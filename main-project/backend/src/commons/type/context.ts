@@ -2,6 +2,8 @@ export interface IUser {
   user: {
     email: string;
     id: string;
+    exp?: string;
+    cookie?: string;
   };
 }
 
