@@ -1,5 +1,6 @@
 import {
   CACHE_MANAGER,
+  HttpException,
   Inject,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -69,11 +70,13 @@ export class AuthResolver {
         refreshToken = context.req.headers[key].split('=')[1];
       }
     }
-    console.log(context.req.headers['authorization']);
     try {
       const isAccessToken = jwt.verify(accessToken, process.env.JWT_SECRET);
       const isRefreshToken = jwt.verify(refreshToken, 'myRefreshKey');
-
+      console.log('=========', isAccessToken['exp']);
+      // exp - getTime() 해주기
+      // Exp 1660547116
+      // getTime 1660543554297
       await this.cacheManager.set(`accessToken:${accessToken}`, accessToken, {
         ttl: isAccessToken['exp'],
       });
@@ -87,8 +90,9 @@ export class AuthResolver {
 
       return '로그아웃에 성공했습니다.';
     } catch (error) {
-      console.log(error.message);
-      throw new UnauthorizedException();
+      // console.log(error.message);
+      // throw new UnauthorizedException();
+      throw new HttpException(error.reponse.message, error.status);
     }
   }
 }
