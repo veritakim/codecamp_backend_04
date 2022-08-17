@@ -71,20 +71,23 @@ export class AuthResolver {
       }
     }
     try {
-      const isAccessToken = jwt.verify(accessToken, process.env.JWT_SECRET);
+      const isAccessToken = jwt.verify(accessToken, 'myAccessKey');
       const isRefreshToken = jwt.verify(refreshToken, 'myRefreshKey');
-      console.log('=========', isAccessToken['exp']);
+      // console.log('=========', isAccessToken['exp']);
       // exp - getTime() 해주기
-      // Exp 1660547116
+      // Exp     1660547116
       // getTime 1660543554297
+      const getTime = new Date().getTime();
+      const time = Math.ceil(getTime * 0.001);
+
       await this.cacheManager.set(`accessToken:${accessToken}`, accessToken, {
-        ttl: isAccessToken['exp'],
+        ttl: isAccessToken['exp'] - time,
       });
       await this.cacheManager.set(
         `refreshToken:${refreshToken}`,
         refreshToken,
         {
-          ttl: isRefreshToken['exp'],
+          ttl: isRefreshToken['exp'] - time,
         },
       );
 

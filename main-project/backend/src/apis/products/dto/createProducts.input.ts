@@ -19,8 +19,8 @@ export class CreateProductInput {
   @Field(() => String, { nullable: true })
   expDate: Date;
 
-  @Field(() => ProductSubCategoryInput)
-  productSubCategory: ProductSubCategoryInput;
+  @Field(() => String)
+  productSubCategory: string;
 
   @Field(() => ProductDescriptionsInput)
   description: ProductDescriptionsInput;

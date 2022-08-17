@@ -68,7 +68,7 @@ type ProductOrder {
 }
 
 type Query {
-  fetchProducts: [Product!]!
+  fetchProducts(search: String): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductsWithDeleted: [Product!]!
   fetchUsers: [User!]!
@@ -99,15 +99,10 @@ input CreateProductInput {
   price: Int!
   quantity: Int!
   expDate: String
-  productSubCategory: ProductSubCategoryInput!
+  productSubCategory: String!
   description: ProductDescriptionsInput!
   images: [String!]!
   hamsters: [String!]!
-}
-
-input ProductSubCategoryInput {
-  id: String!
-  name: String!
 }
 
 input ProductDescriptionsInput {
@@ -119,7 +114,7 @@ input UpdateProductInput {
   price: Int
   quantity: Int
   expDate: String
-  productSubCategory: ProductSubCategoryInput
+  productSubCategory: String
   description: ProductDescriptionsInput
   images: [String!]
   hamsters: [String!]

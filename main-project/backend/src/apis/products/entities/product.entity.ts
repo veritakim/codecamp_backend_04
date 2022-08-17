@@ -15,6 +15,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -23,10 +24,6 @@ export class Product {
   @PrimaryGeneratedColumn('uuid', { name: 'productId' })
   @Field(() => String)
   id: string;
-
-  // @Column()
-  // @Field(() => String)
-  // productId: string;
 
   @Column({ unique: true, nullable: true })
   @Field(() => String)
@@ -46,6 +43,9 @@ export class Product {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(() => ProductSubCategory)
   @Field(() => ProductSubCategory)
