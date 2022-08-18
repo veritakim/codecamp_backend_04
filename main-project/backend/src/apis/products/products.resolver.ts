@@ -1,7 +1,13 @@
-import { CACHE_MANAGER, Inject } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  Inject,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
+import e from 'express';
 import { FilesService } from '../files/files.service';
 import { CreateProductInput } from './dto/createProducts.input';
 import { UpdateProductInput } from './dto/updateProducts.input';
@@ -22,19 +28,35 @@ export class ProductsResolver {
   async fetchProducts(
     @Args({ name: 'search', nullable: true }) search: string, //
   ) {
+    // console.log('search', search);
     const redisResult = await this.cacheManager.get(search);
-    if (redisResult) console.log('레디스 있음 ', redisResult);
-
-    const elasticResult = await this.elasticsearchService.search({
-      index: 'myproduct04',
-      query: {
-        match: {
-          name: search,
+    console.log(redisResult);
+    if (redisResult) return redisResult;
+    try {
+      const elasticResult = await this.elasticsearchService.search({
+        index: 'products',
+        query: {
+          bool: {
+            must: [
+              {
+                term: {
+                  name: search,
+                },
+              },
+            ],
+            must_not: {
+              exists: {
+                field: 'deletedat',
+              },
+            },
+          },
         },
-      },
-    });
-    console.log('result', JSON.stringify(elasticResult, null, '  '));
-    // return this.productsService.findAll();
+      });
+      console.log('result', JSON.stringify(elasticResult, null, '  '));
+    } catch (error) {
+      throw new UnprocessableEntityException('null');
+    }
+    return this.productsService.findAll();
   }
 
   @Query(() => Product)

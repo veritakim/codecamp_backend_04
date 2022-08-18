@@ -62,6 +62,6 @@ export class Product {
   hamsters: Hamster[];
 
   @OneToMany(() => ProductsImage, (productImages) => productImages.product)
-  @Field(() => [String])
-  images: string[];
+  @Field(() => [ProductsImage])
+  productsImage: ProductsImage[];
 }

@@ -13,3 +13,19 @@ INSERT into product_sub_category  (id, name, mainCategoryId)
 INSERT into product_sub_category  (id, name, mainCategoryId)
      values (uuid(), "사료", "eb5f1484-0d96-11ed-bd9f-0242ac1f0002")
 ;
+
+
+
+use mymaindocker04;
+
+SELECT p.productId as productId, p.price as price, GROUP_CONCAT(pimg.url) as url ,p.name as name, p.expDate as expDate, p.quantity as quantity, p.deletedAt as deletedAt, p.updatedAt as updatedAt  
+		, psc.name as productSubCategory, pd.contents as productDescription
+from product p 
+Inner Join product_sub_category psc 
+	on psc.id = p.productSubCategoryId
+INNER JOIN product_descriptions pd 
+	on pd.id = p.productDescriptionId 
+INNER JOIN products_image pimg 
+	on pimg.productId = p.productId 
+GROUP BY productId, price, name, expDate, quantity, deletedAt, updatedAt, productSubCategory, productDescription
+;

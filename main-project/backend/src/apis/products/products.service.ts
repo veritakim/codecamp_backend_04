@@ -145,7 +145,12 @@ export class ProductsService {
 
   findAll() {
     return this.productRepository.find({
-      relations: ['productDescription', 'productSubCategory', 'hamsters'],
+      relations: [
+        'productDescription',
+        'productSubCategory',
+        'hamsters',
+        'productsImage',
+      ],
     });
   }
 

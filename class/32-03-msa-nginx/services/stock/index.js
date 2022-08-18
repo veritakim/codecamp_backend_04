@@ -2,7 +2,7 @@ import express from "express";
 
 const app = express();
 
-// 주식 가격 조회하기
+// 주식 가격 조회하기ㅇ
 app.get("/stocks", (req, res) => {
   res.send("주식 가격을 조회합니다.");
 });

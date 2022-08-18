@@ -33,7 +33,11 @@ type Product {
   productSubCategory: ProductSubCategory!
   productDescription: ProductDescriptions!
   hamsters: [Hamster!]!
-  images: [String!]!
+  productsImage: [ProductsImage!]!
+}
+
+type ProductsImage {
+  url: String!
 }
 
 type User {
