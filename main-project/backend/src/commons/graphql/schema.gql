@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Hamster {
-  id: String!
-  name: String!
-  products: [Product!]!
-}
-
 type ProductDescriptions {
   id: String!
   contents: String
@@ -32,7 +26,6 @@ type Product {
   quantity: String!
   productSubCategory: ProductSubCategory!
   productDescription: ProductDescriptions!
-  hamsters: [Hamster!]!
   productsImage: [ProductsImage!]!
 }
 
@@ -106,7 +99,6 @@ input CreateProductInput {
   productSubCategory: String!
   description: ProductDescriptionsInput!
   images: [String!]!
-  hamsters: [String!]!
 }
 
 input ProductDescriptionsInput {
@@ -121,7 +113,6 @@ input UpdateProductInput {
   productSubCategory: String
   description: ProductDescriptionsInput
   images: [String!]
-  hamsters: [String!]
 }
 
 input CreateOrderInput {

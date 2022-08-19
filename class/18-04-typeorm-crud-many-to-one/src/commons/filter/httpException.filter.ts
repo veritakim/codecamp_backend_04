@@ -1,10 +1,10 @@
-import { Catch, ExceptionFilter, HttpException } from '@nestjs/common';
+import { Catch, Filter, Http } from '@nestjs/common';
 
-@Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException) {
-    const status = exception.getStatus();
-    const message = exception.message;
+@Catch(Http)
+export class HttpFilter implements Filter {
+  catch(: Http) {
+    const status = .getStatus();
+    const message = .message;
 
     console.log('=====================');
     console.log('예외가 발생했어요!!!');

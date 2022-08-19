@@ -28,6 +28,6 @@ export class CreateProductInput {
   @Field(() => [String])
   images: string[];
 
-  @Field(() => [String])
-  hamsters: string[];
+  // @Field(() => [String])
+  // hamsters: string[];
 }

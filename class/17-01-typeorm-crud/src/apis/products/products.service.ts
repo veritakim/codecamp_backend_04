@@ -1,8 +1,8 @@
 import {
-  HttpException,
+  Http,
   HttpStatus,
   Injectable,
-  UnprocessableEntityException,
+  UnprocessableEntity,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -68,7 +68,7 @@ export class ProductsService {
         },
       });
       if (product.isSoldout) {
-        throw new UnprocessableEntityException('이미 판매 완료된 상품입니다.');
+        throw new UnprocessableEntity('이미 판매 완료된 상품입니다.');
         return false;
       } else return true;
     } catch (error) {
@@ -76,7 +76,7 @@ export class ProductsService {
     }
 
     // if (product.isSoldout) {
-    //   throw new HttpException(
+    //   throw new Http(
     //     '이미 판매완료된 상품입니다.',
     //     HttpStatus.UNPROCESSABLE_ENTITY,
     //   );

@@ -2,7 +2,6 @@ import {
   CACHE_MANAGER,
   HttpException,
   Inject,
-  UnauthorizedException,
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
@@ -32,6 +31,7 @@ export class AuthResolver {
     @Args('email') email: string, //
     @Args('password') password: string,
     @Context() context: IContext,
+    s,
   ) {
     const user = await this.userService.fetchUser({ email });
 

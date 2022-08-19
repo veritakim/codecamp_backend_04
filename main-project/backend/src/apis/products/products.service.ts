@@ -32,7 +32,7 @@ export class ProductsService {
       const today = Today();
       const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
 
-      const { expDate, description, productSubCategory, hamsters, ...rest } =
+      const { expDate, description, productSubCategory, ...rest } =
         createProductInput;
 
       const newExpDate = expDate.split('-').join('').substring(0, 8);
@@ -45,6 +45,7 @@ export class ProductsService {
       });
 
       // n:m hamsters 등록하기
+      /*
       const hamsterArr = [];
       for (let i = 0; i < hamsters.length; i++) {
         const hamsterName = await this.hamsterRepository.findOne({
@@ -62,6 +63,7 @@ export class ProductsService {
         }
         // console.log('ham', hamsterArr);
       }
+      */
 
       const result = await this.productRepository.save({
         ...rest,
@@ -69,7 +71,7 @@ export class ProductsService {
         productDescription: desc,
         expDate: newExpDate,
         productSubCategory: productSubCategory,
-        hamsters: hamsterArr,
+        // hamsters: hamsterArr,
       });
 
       const productId = result.id;
@@ -143,21 +145,17 @@ export class ProductsService {
     return result;
   }
 
-  findAll() {
+  findAll(search) {
     return this.productRepository.find({
-      relations: [
-        'productDescription',
-        'productSubCategory',
-        'hamsters',
-        'productsImage',
-      ],
+      where: search,
+      relations: ['productDescription', 'productSubCategory', 'productsImage'],
     });
   }
 
   findOne({ productId }) {
     return this.productRepository.findOne({
       where: { id: productId }, //
-      relations: ['productDescription', 'productSubCategory', 'hamsters'],
+      relations: ['productDescription', 'productSubCategory'],
     });
   }
 

@@ -1,6 +1,5 @@
 node_modules
-.env
-.env.docker
+.env*
 import.service.ts
 gcp-file-storage.json
 gcp-bigquery.json

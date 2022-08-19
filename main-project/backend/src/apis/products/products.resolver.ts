@@ -1,6 +1,6 @@
 import {
   CACHE_MANAGER,
-  HttpException,
+  ConsoleLogger,
   Inject,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -8,11 +8,25 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 import e from 'express';
+import { identity } from 'rxjs';
 import { FilesService } from '../files/files.service';
 import { CreateProductInput } from './dto/createProducts.input';
 import { UpdateProductInput } from './dto/updateProducts.input';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
+
+interface IBoard {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  productSubCategory: string;
+  productDescription: string;
+  productsImage: string[];
+  expDate: Date;
+  deletedAt: Date;
+  updatedAt: Date;
+}
 
 @Resolver()
 export class ProductsResolver {
@@ -28,13 +42,17 @@ export class ProductsResolver {
   async fetchProducts(
     @Args({ name: 'search', nullable: true }) search: string, //
   ) {
-    // console.log('search', search);
+    // redis search
     const redisResult = await this.cacheManager.get(search);
-    console.log(redisResult);
-    if (redisResult) return redisResult;
+
+    if (redisResult) {
+      return redisResult;
+    }
+
     try {
+      const elasticArr = [];
       const elasticResult = await this.elasticsearchService.search({
-        index: 'products',
+        index: 'myproduct1',
         query: {
           bool: {
             must: [
@@ -52,11 +70,35 @@ export class ProductsResolver {
           },
         },
       });
-      console.log('result', JSON.stringify(elasticResult, null, '  '));
+      const obj = {};
+      if (elasticResult) {
+        elasticResult.hits.hits.map(async (el, i) => {
+          obj['name'] = el._source['name'];
+          obj['id'] = el._source['id'];
+          obj['productDescription'] = {
+            contents: el._source['productdescription'],
+          };
+          obj['price'] = el._source['price'];
+          obj['quantity'] = el._source['quantity'];
+          obj['updatedAt'] = el._source['updatedat'];
+          const ddd = { ...obj };
+          elasticArr.push(ddd);
+
+          // Redis에 저장시키기
+          await this.cacheManager.set(el._source['name'], el._source, {
+            ttl: 100,
+          });
+        });
+
+        return elasticArr;
+      } else {
+        return this.productsService.findAll(search);
+      }
+
+      // return 해주기
     } catch (error) {
       throw new UnprocessableEntityException('null');
     }
-    return this.productsService.findAll();
   }
 
   @Query(() => Product)

@@ -13,7 +13,7 @@ export class Hamster {
   @Field(() => String)
   name: string;
 
-  @ManyToMany(() => Product, (products) => products.hamsters)
+  // @ManyToMany(() => Product, (products) => products.hamsters)
   @Field(() => [Product])
   products: Product[];
 }

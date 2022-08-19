@@ -21,7 +21,7 @@ import {
 @Entity()
 @ObjectType()
 export class Product {
-  @PrimaryGeneratedColumn('uuid', { name: 'productId' })
+  @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
@@ -56,10 +56,10 @@ export class Product {
   @Field(() => ProductDescriptions)
   productDescription: ProductDescriptions;
 
-  @JoinTable()
-  @ManyToMany(() => Hamster, (hamsters) => hamsters.products)
-  @Field(() => [Hamster])
-  hamsters: Hamster[];
+  // @JoinTable()
+  // @ManyToMany(() => Hamster, (hamsters) => hamsters.products)
+  // @Field(() => [Hamster])
+  // hamsters: Hamster[];
 
   @OneToMany(() => ProductsImage, (productImages) => productImages.product)
   @Field(() => [ProductsImage])

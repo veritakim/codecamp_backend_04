@@ -1,0 +1,34 @@
+{
+      "properties": {
+        "name": {
+          "type": "text",
+          "analyzer": "my_ngram_analyzer"
+        },
+        "productdescription": {
+          "type": "text"
+        },
+        "price": {
+          "type": "long"
+        },
+        "quantity": {
+          "type": "byte"
+        },
+        "productsimage": {
+        	"type": "text"
+        },
+        "productid": {
+        	"type": "text"
+        },
+        "expdate": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||yyyy/MM/dd||epoch_millis"
+        },
+        "deletedate": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||yyyy/MM/dd||epoch_millis"
+        },
+        "updatedat": {
+          "type": "float",
+        }
+      }
+    }
