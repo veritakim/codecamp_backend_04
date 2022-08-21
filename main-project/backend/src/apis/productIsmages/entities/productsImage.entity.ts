@@ -15,6 +15,6 @@ export class ProductsImage {
   @Column({ nullable: true })
   isMain: boolean;
 
-  @ManyToOne(() => Product, (product) => product.productsImage)
-  product: Product;
+  // @ManyToOne(() => Product, (product) => product.productsImage)
+  // product: Product;
 }

@@ -32,8 +32,7 @@ export class ProductsService {
       const today = Today();
       const random = String(Math.round(Math.random() * 10000)).padEnd(5, '2');
 
-      const { expDate, description, productSubCategory, ...rest } =
-        createProductInput;
+      const { expDate, description, ...rest } = createProductInput;
 
       const newExpDate = expDate.split('-').join('').substring(0, 8);
       if (newExpDate < today) {
@@ -70,13 +69,14 @@ export class ProductsService {
         productId: `FOOD-${random}`,
         productDescription: desc,
         expDate: newExpDate,
-        productSubCategory: productSubCategory,
+        // productSubCategory: productSubCategory,
         // hamsters: hamsterArr,
       });
 
       const productId = result.id;
       console.log('productId', productId);
 
+      /*
       console.log('images', images);
       images.map(
         async (el) =>
@@ -85,8 +85,10 @@ export class ProductsService {
             product: productId,
           }),
       );
+      */
 
       await queryRunner.commitTransaction();
+      // console.log('SSSS', result);
       return result;
     } catch (error) {
       console.log(error.message);
@@ -108,6 +110,7 @@ export class ProductsService {
     }
   }
 
+  /*
   async updateProduct({ productId, updateProductInput, originImage: files }) {
     const { images } = updateProductInput;
     // console.log('QQQQQQQQQ', originImage[0].url);
@@ -144,6 +147,7 @@ export class ProductsService {
 
     return result;
   }
+    */
 
   findAll(search) {
     return this.productRepository.find({

@@ -7,30 +7,18 @@ type ProductDescriptions {
   contents: String
 }
 
-type ProductMainCategory {
-  id: String!
-  name: String!
-}
-
-type ProductSubCategory {
-  id: String!
-  name: String!
-  mainCategory: ProductMainCategory!
-}
-
 type Product {
   id: String!
   name: String!
   price: String!
   expDate: String
   quantity: String!
-  productSubCategory: ProductSubCategory!
   productDescription: ProductDescriptions!
-  productsImage: [ProductsImage!]!
 }
 
-type ProductsImage {
-  url: String!
+type ProductMainCategory {
+  id: String!
+  name: String!
 }
 
 type User {
@@ -78,7 +66,6 @@ type Mutation {
   restoreAccessToken: String!
   logout: String!
   createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
   restoreProduct(productId: String!): Boolean!
   createPayment(impUid: String!, amount: Int!, createOrderInput: CreateOrderInput!): ProductOrder!
@@ -96,23 +83,11 @@ input CreateProductInput {
   price: Int!
   quantity: Int!
   expDate: String
-  productSubCategory: String!
   description: ProductDescriptionsInput!
-  images: [String!]!
 }
 
 input ProductDescriptionsInput {
   contents: String
-}
-
-input UpdateProductInput {
-  name: String
-  price: Int
-  quantity: Int
-  expDate: String
-  productSubCategory: String
-  description: ProductDescriptionsInput
-  images: [String!]
 }
 
 input CreateOrderInput {

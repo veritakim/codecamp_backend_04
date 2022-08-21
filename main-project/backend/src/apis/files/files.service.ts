@@ -57,6 +57,7 @@ export class FilesService {
     );
   }
 
+  /*
   async findImages({ productId }) {
     const productImages = await this.productsImage.find({
       where: { product: { id: productId } },
@@ -64,6 +65,7 @@ export class FilesService {
 
     return productImages;
   }
+  */
 
   // createImages() {}
 }

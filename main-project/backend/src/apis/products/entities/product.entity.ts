@@ -47,9 +47,9 @@ export class Product {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => ProductSubCategory)
-  @Field(() => ProductSubCategory)
-  productSubCategory: ProductSubCategory;
+  // @ManyToOne(() => ProductSubCategory)
+  // @Field(() => ProductSubCategory)
+  // productSubCategory: ProductSubCategory;
 
   @JoinColumn()
   @OneToOne(() => ProductDescriptions)
@@ -61,7 +61,7 @@ export class Product {
   // @Field(() => [Hamster])
   // hamsters: Hamster[];
 
-  @OneToMany(() => ProductsImage, (productImages) => productImages.product)
-  @Field(() => [ProductsImage])
-  productsImage: ProductsImage[];
+  // @OneToMany(() => ProductsImage, (productImages) => productImages.product)
+  // @Field(() => [ProductsImage])
+  // productsImage: ProductsImage[];
 }

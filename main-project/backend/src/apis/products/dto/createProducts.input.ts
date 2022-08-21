@@ -19,14 +19,14 @@ export class CreateProductInput {
   @Field(() => String, { nullable: true })
   expDate: Date;
 
-  @Field(() => String)
-  productSubCategory: string;
+  // @Field(() => String)
+  // productSubCategory: string;
 
   @Field(() => ProductDescriptionsInput)
   description: ProductDescriptionsInput;
 
-  @Field(() => [String])
-  images: string[];
+  // @Field(() => [String])
+  // images: string[];
 
   // @Field(() => [String])
   // hamsters: string[];

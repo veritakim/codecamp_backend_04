@@ -44,13 +44,17 @@ export class ProductsResolver {
   ) {
     // redis search
     const redisResult = await this.cacheManager.get(search);
+    console.log(redisResult);
 
-    if (redisResult) {
+    if (redisResult !== null && redisResult !== []) {
       return redisResult;
     }
 
     try {
+      // elasticsearch
+      // console.log('elastic');
       const elasticArr = [];
+      // console.log('dddd');
       const elasticResult = await this.elasticsearchService.search({
         index: 'myproduct1',
         query: {
@@ -70,6 +74,8 @@ export class ProductsResolver {
           },
         },
       });
+
+      // console.log(elasticResult);
       const obj = {};
       if (elasticResult) {
         elasticResult.hits.hits.map(async (el, i) => {
@@ -83,13 +89,12 @@ export class ProductsResolver {
           obj['updatedAt'] = el._source['updatedat'];
           const ddd = { ...obj };
           elasticArr.push(ddd);
-
-          // Redis에 저장시키기
-          await this.cacheManager.set(el._source['name'], el._source, {
-            ttl: 100,
-          });
         });
 
+        // Redis에 저장시키기
+        await this.cacheManager.set(search, elasticArr, {
+          ttl: 100,
+        });
         return elasticArr;
       } else {
         return this.productsService.findAll(search);
@@ -120,6 +125,7 @@ export class ProductsResolver {
     return this.productsService.createproduct({ createProductInput });
   }
 
+  /*
   @Mutation(() => Product)
   async updateProduct(
     @Args('productId') productId: string,
@@ -134,6 +140,7 @@ export class ProductsResolver {
       updateProductInput,
     });
   }
+  */
 
   @Mutation(() => Boolean)
   deleteProduct(
