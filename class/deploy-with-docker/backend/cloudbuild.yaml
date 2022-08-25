@@ -1,0 +1,24 @@
+steps:
+  # 1단계 => docker-compose -f docker-compose.prod.yaml build
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - class/deploy-with-docker/backend/docker-compose.prod.yaml
+      - build
+    # 2단계 => docker-compose -f docker-compose.prod.yaml push
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - class/deploy-with-docker/backend/docker-compose.prod.yaml
+      - push
+
+    # 3단계 => kubectl set image deployment/mybackend04-nestjs my-backend-sha256-1 (모르겠으면 kubectl get pods -o yaml)
+  - name: gcr.io/cloud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/mybackend04-nestjs
+      - my-backend-sha256-1=asia.gcr.io/united-blend-358105/my-backend:1.7
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=mybackend04-cluster-1
